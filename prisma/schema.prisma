@@ -1,0 +1,119 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum AuthorityClass {
+  BOARD
+  EXECUTIVE
+  POLICY_LEVEL
+  UNCLEAR
+}
+
+model Org {
+  id        String   @id @default(cuid())
+  name      String
+  // LCMS Congregation toggle:
+  lcmsMode  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users     User[]
+  chats     ChatSession[]
+  qaRuns    QARun[]
+  scenarios Scenario[]
+  scenarios Scenario[]
+  scenarios Scenario[]
+  nudges    NudgeSubscription[]
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id])
+
+  chats     ChatSession[]
+  qaRuns    QARun[]
+  scenarios Scenario[]
+  scenarios Scenario[]
+}
+
+model ChatSession {
+  id        String   @id @default(cuid())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  title     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  messages  ChatMessage[]
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  sessionId String
+  session   ChatSession @relation(fields: [sessionId], references: [id])
+
+  role      String // "user" | "assistant"
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model QARun {
+  id        String   @id @default(cuid())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  question  String
+  result    AuthorityClass
+  rationale String
+  createdAt DateTime @default(now())
+}
+
+model NudgeSubscription {
+  id        String   @id @default(cuid())
+  orgId     String
+  org       Org      @relation(fields: [orgId], references: [id])
+
+  enabled   Boolean  @default(true)
+  cadence   String   @default("weekly") // "daily"|"weekly" etc
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+
+model Scenario {
+  id               String   @id @default(cuid())
+  orgId            String
+  org              Org      @relation(fields: [orgId], references: [id])
+  userId           String
+  user             User     @relation(fields: [userId], references: [id])
+
+  // Original input
+  scenario         String
+
+  // Classification snapshot
+  authority        AuthorityClass
+  authorityWhy     String
+  routing          String?
+  routingRationale String?
+
+  // Meeting-ready (optional; set when generated)
+  meetingReady     Json?
+
+  createdAt        DateTime @default(now())
+}
