@@ -1,9 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/server/prisma";
-import { openai } from "@/server/openai";
-import { buildSystemPrompt } from "@/server/governance/systemPrompt";
-import { PRINCIPLES } from "@/server/governance/principles";
-
+import { prisma } from "../../server/prisma";
+import { openai } from "../../server/openai";
+import { buildSystemPrompt } from "../../server/governance/systemPrompt";
+import { PRINCIPLES } from "../../server/governance/principles";
 type Msg = { role: "user" | "assistant"; content: string };
 
 async function getOrCreate() {

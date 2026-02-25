@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/server/prisma";
+import { prisma } from "../../../server/prisma";
 
 /**
  * Hook this route to a cron job (Vercel Cron / GitHub Actions).

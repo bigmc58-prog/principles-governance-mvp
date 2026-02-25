@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/server/prisma";
+import { prisma } from "../../server/prisma";
 
 // Demo: bootstrap a single org + single user.
 // Replace with NextAuth later.

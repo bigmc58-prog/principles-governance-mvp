@@ -50,6 +50,12 @@ const polityQuestions = opts?.lcmsMode ? lcmsPolityQuestions(input) : [];
 
 const clarifyingQuestions = [...baseQuestions, ...polityQuestions].slice(0, 6);
 
+const { routing, routingRationale } = routingRecommendation({
+  question: input,
+  lcmsMode: Boolean(opts?.lcmsMode),
+  authority: result,
+});
+
   return {
     result,
     routing,

@@ -57,7 +57,22 @@ async function generateMeetingReady() {
   } finally {
     setBusyMeeting(false);
   }
-}
+}async function copyAgendaPacket() {
+  const text = formatAgendaPacket({ scenario: q.trim(), classification: result, meetingReady });
+  try {
+    await navigator.clipboard.writeText(text);
+    alert("Copied agenda packet text.");
+  } catch {
+    // Fallback
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+    alert("Copied agenda packet text.");
+  }
+
   return (
     <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr", gap: 16, alignItems: "start" }}>
       <div>
@@ -198,21 +213,6 @@ function formatAgendaPacket(opts: { scenario: string; classification?: any; meet
   return lines.join("\n");
 }
 
-async function copyAgendaPacket() {
-  const text = formatAgendaPacket({ scenario: q.trim(), classification: result, meetingReady });
-  try {
-    await navigator.clipboard.writeText(text);
-    alert("Copied agenda packet text.");
-  } catch {
-    // Fallback
-    const ta = document.createElement("textarea");
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand("copy");
-    document.body.removeChild(ta);
-    alert("Copied agenda packet text.");
-  }
 }
 
 

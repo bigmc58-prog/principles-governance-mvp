@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/server/prisma";
-import { quickHeuristicClassify } from "@/server/governance/classify";
+import { prisma } from "../../server/prisma";
+import { quickHeuristicClassify } from "../../server/governance/classify";
 
 async function getOrCreate() {
   let org = await prisma.org.findFirst();

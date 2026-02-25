@@ -1,8 +1,8 @@
 import type { NextApiRequest, NextApiResponse } from "next";
-import { prisma } from "@/server/prisma";
-import { openai } from "@/server/openai";
-import { quickHeuristicClassify } from "@/server/governance/classify";
-import { meetingReadySystemPrompt, meetingReadyUserPrompt } from "@/server/governance/meetingReady";
+import { prisma } from "../../server/prisma";
+import { openai } from "../../server/openai";
+import { quickHeuristicClassify } from "../../server/governance/classify";
+import { meetingReadySystemPrompt, meetingReadyUserPrompt } from "../../server/governance/meetingReady";
 
 async function getOrCreate() {
   let org = await prisma.org.findFirst();
@@ -17,7 +17,7 @@ async function getOrCreate() {
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
-  const { org } = await getOrCreate();
+  const { org, user } = await getOrCreate();
   const { scenario } = req.body ?? {};
   if (typeof scenario !== "string" || !scenario.trim()) return res.status(400).json({ error: "Missing scenario" });
 
