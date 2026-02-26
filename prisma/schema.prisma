@@ -26,8 +26,6 @@ model Org {
   chats     ChatSession[]
   qaRuns    QARun[]
   scenarios Scenario[]
-  scenarios Scenario[]
-  scenarios Scenario[]
   nudges    NudgeSubscription[]
 }
 
@@ -43,7 +41,6 @@ model User {
 
   chats     ChatSession[]
   qaRuns    QARun[]
-  scenarios Scenario[]
   scenarios Scenario[]
 }
 
